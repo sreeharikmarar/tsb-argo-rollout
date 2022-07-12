@@ -97,3 +97,45 @@ spec:
       protocol: HTTP
     hosts:
     - blogger.tetrate.com
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: blogger-dr
+  namespace: content
+  labels:
+    istio.io/rev: tsb
+  annotations:
+    tsb.tetrate.io/organization: tetrate
+    tsb.tetrate.io/tenant: content
+    tsb.tetrate.io/workspace: blogger-ws
+    tsb.tetrate.io/trafficGroup: blogger-traffic
+spec:
+  host: blogger.content.svc.cluster.local
+  subsets:
+    - name: v1
+      labels:
+        version: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: blogger-vs
+  namespace: content
+  labels:
+    istio.io/rev: tsb
+  annotations:
+    tsb.tetrate.io/organization: tetrate
+    tsb.tetrate.io/tenant: content
+    tsb.tetrate.io/workspace: blogger-ws
+    tsb.tetrate.io/gatewayGroup: blogger-gateway
+spec:
+  hosts:
+    - "blogger.tetrate.com"
+  gateways:
+    -  blogger-gateway
+  http:
+    - route:
+        - destination:
+            host: blogger.content.svc.cluster.local
+            subset: v1

@@ -4,6 +4,7 @@ metadata:
   labels:
     app: blogger-api
     process: web
+    version: v1
   name: blogger-api-web
   namespace: content
 spec:
@@ -12,11 +13,13 @@ spec:
     matchLabels:
       app: blogger-api
       process: web
+      version: v1
   template:
     metadata:
       labels:
         app: blogger-api
         process: web
+        version: v1
     spec:
       containers:
       - env:
