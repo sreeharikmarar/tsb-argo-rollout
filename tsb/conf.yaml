@@ -8,7 +8,7 @@ metadata:
 spec:
   displayName: content
 ---
-apiversion: tsb.tetrate.io/v2
+apiVersion: tsb.tetrate.io/v2
 kind: Workspace
 metadata:
   name: blogger-ws
