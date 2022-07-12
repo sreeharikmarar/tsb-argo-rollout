@@ -2,6 +2,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: blogger-api-migrate
+  namespace: content
   labels:
     app.kubernetes.io/name: blogger-api-migrate
 spec:
