@@ -1,0 +1,99 @@
+---
+apiVersion: api.tsb.tetrate.io/v2
+kind: Tenant
+metadata:
+  name: content
+  annotations: 
+    tsb.tetrate.io/organization: tetrate
+spec:
+  displayName: content
+---
+apiversion: api.tsb.tetrate.io/v2
+kind: Workspace
+metadata:
+  name: blogger-ws
+  annotations: 
+    tsb.tetrate.io/organization: tetrate
+    tsb.tetrate.io/tenant: content
+spec:
+  namespaceSelector:
+    names:
+      - "cp-cluster-1/content"
+---
+apiVersion: gateway.tsb.tetrate.io/v2
+kind: Group
+metadata:
+  name: blogger-gateway
+  annotations:
+    tsb.tetrate.io/organization: tetrate
+    tsb.tetrate.io/tenant: content
+    tsb.tetrate.io/workspace: blogger-ws
+spec:
+  displayName: blogger-gateway-group
+  namespaceSelector:
+    names:
+      - "cp-cluster-1/content"
+  configMode: DIRECT
+---
+apiVersion: traffic.tsb.tetrate.io/v2
+kind: Group
+metadata:
+  name: blogger-traffic
+  annotations:
+    tsb.tetrate.io/organization: tetrate
+    tsb.tetrate.io/tenant: content
+    tsb.tetrate.io/workspace: blogger-ws
+spec:
+  displayName: blogger-traffic-group
+  namespaceSelector:
+    names:
+      - "cp-cluster-1/content"
+  configMode: DIRECT
+---
+apiVersion: security.tsb.tetrate.io/v2
+kind: Group
+metadata:
+  name: blogger-security
+  annotations:
+    tsb.tetrate.io/organization: tetrate
+    tsb.tetrate.io/tenant: content
+    tsb.tetrate.io/workspace: blogger-ws
+spec:
+  displayName: blogger-security-group
+  namespaceSelector:
+    names:
+      - "cp-cluster-1/content"
+  configMode: DIRECT
+---
+apiVersion: install.tetrate.io/v1alpha1
+kind: IngressGateway
+metadata:
+  name: tsb-gateway-blogger
+  namespace: content
+spec:
+  kubeSpec:
+    service:
+      type: LoadBalancer
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: blogger-gateway
+  namespace: content
+  labels:
+    istio.io/rev: "tsb"
+  annotations:
+    tsb.tetrate.io/organization: tetrate
+    tsb.tetrate.io/tenant: content
+    tsb.tetrate.io/workspace: blogger-ws
+    tsb.tetrate.io/gatewayGroup: blogger-gateway
+spec:
+  selector:
+    app: tsb-gateway-blogger
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - blogger.tetrate.com
