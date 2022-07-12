@@ -1,0 +1,22 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: blogger-gateway
+  namespace: content
+  labels:
+    istio.io/rev: "tsb"
+  annotations:
+    tsb.tetrate.io/organization: tetrate
+    tsb.tetrate.io/tenant: content
+    tsb.tetrate.io/workspace: blogger-ws
+    tsb.tetrate.io/gatewayGroup: blogger-gateway
+spec:
+  selector:
+    app: tsb-gateway-blogger
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - blogger.tetrate.com
