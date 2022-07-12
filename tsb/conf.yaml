@@ -1,5 +1,5 @@
 ---
-apiVersion: api.tsb.tetrate.io/v2
+apiVersion: tsb.tetrate.io/v2
 kind: Tenant
 metadata:
   name: content
@@ -8,7 +8,7 @@ metadata:
 spec:
   displayName: content
 ---
-apiversion: api.tsb.tetrate.io/v2
+apiversion: tsb.tetrate.io/v2
 kind: Workspace
 metadata:
   name: blogger-ws
@@ -81,7 +81,7 @@ metadata:
   name: blogger-gateway
   namespace: content
   labels:
-    istio.io/rev: "tsb"
+    istio.io/rev: tsb
   annotations:
     tsb.tetrate.io/organization: tetrate
     tsb.tetrate.io/tenant: content
