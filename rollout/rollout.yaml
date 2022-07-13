@@ -8,20 +8,30 @@ spec:
     matchLabels:
       app: blogger-api
       process: web
-  workloadRef:                                 # Reference an existing Deployment using workloadRef field
+  workloadRef:
     apiVersion: apps/v1
     kind: Deployment
     name: blogger-api-web
   strategy:
     canary:
+      canaryMetadata:
+        annotations:
+          role: canary
+        labels:
+          role: canary
+      stableMetadata:
+        annotations:
+          role: stable
+        labels:
+          role: stable
       trafficRouting:
         istio:
           virtualService: 
             name: blogger-vs
           destinationRule:
             name: blogger-dr    
-            canarySubsetName: v2  
-            stableSubsetName: v1  
+            canarySubsetName: canary  
+            stableSubsetName: stable  
       steps:
       - setWeight: 5
       - pause:
