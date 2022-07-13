@@ -4,21 +4,14 @@ metadata:
   name: rollout-example
 spec:
   replicas: 5
-  revisionHistoryLimit: 2
   selector:
     matchLabels:
-      app: rollout-example
-  template:
-    metadata:
-      labels:
-        app: rollout-example
-    spec:
-      containers:
-      - name: rollouts-demo
-        image: argoproj/rollouts-demo:blue
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 8080
+      app: blogger-api
+      process: web
+  workloadRef:                                 # Reference an existing Deployment using workloadRef field
+    apiVersion: apps/v1
+    kind: Deployment
+    name: blogger-api-web
   strategy:
     canary:
       trafficRouting:
