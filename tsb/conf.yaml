@@ -115,10 +115,10 @@ spec:
   subsets:
     - name: stable
       labels:
-        app: rollout-example
+        app: blogger-api
     - name: canary
       labels:
-        version: rollout-example
+        app: blogger-api
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -140,10 +140,10 @@ spec:
   http:
     - route:
         - destination:
-            host: rollout-example
+            host: blogger.content.svc.cluster.local
             subset: stable
           weight: 100
         - destination:
-            host: rollout-example
+            host: blogger.content.svc.cluster.local
             subset: canary
           weight: 0
