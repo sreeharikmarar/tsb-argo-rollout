@@ -5,7 +5,7 @@ metadata:
     app: blogger-api
     process: web
     version: v1
-  name: blogger-api-web
+  name: blogger-api-web-v1
   namespace: content
 spec:
   replicas: 1
