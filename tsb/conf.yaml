@@ -116,9 +116,11 @@ spec:
     - name: stable
       labels:
         app: blogger-api
+        role: stable
     - name: canary
       labels:
         app: blogger-api
+        role: canary
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
