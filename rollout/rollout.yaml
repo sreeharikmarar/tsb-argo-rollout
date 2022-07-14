@@ -31,8 +31,21 @@ spec:
           destinationRule:
             name: blogger-dr    
             canarySubsetName: canary  
-            stableSubsetName: stable  
+            stableSubsetName: stable
+      analysis:
+        templates:
+        - templateName: success-rate
+        args:
+        - name: service-name
+          value: blogger.content.svc.cluster.local
       steps:
-      - setWeight: 5
-      - pause:
-          duration: 10m
+      - setWeight: 10
+      - pause: {}
+      - setWeight: 20
+      - pause: {duration: 10}
+      - setWeight: 40
+      - pause: {duration: 10}
+      - setWeight: 60
+      - pause: {duration: 10}
+      - setWeight: 80
+      - pause: {duration: 10}
