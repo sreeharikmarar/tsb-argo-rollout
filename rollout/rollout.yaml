@@ -32,12 +32,6 @@ spec:
             name: blogger-dr    
             canarySubsetName: canary  
             stableSubsetName: stable
-      analysis:
-        templates:
-        - templateName: success-rate
-        args:
-        - name: service-name
-          value: blogger.content.svc.cluster.local
       steps:
       - setWeight: 10
       - pause: {}
