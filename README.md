@@ -4,11 +4,11 @@ TSB mesh configurations integrated with argoCD and argoRollout for Canary deploy
 
 ### Install ArgoCD
 
-Please refer their offical documentation [here](https://argo-cd.readthedocs.io/en/stable/getting_started/)
+Please refer the offical documentation [here](https://argo-cd.readthedocs.io/en/stable/getting_started/)
 
 ### Install ArgoRollout
 
-Please refer their offical documentation [here](https://argoproj.github.io/argo-rollouts/installation/)
+Please refer the offical documentation [here](https://argoproj.github.io/argo-rollouts/installation/)
 
 ### Deploy Application 
 
