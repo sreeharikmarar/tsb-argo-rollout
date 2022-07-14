@@ -3,7 +3,7 @@ kind: Rollout
 metadata:
   name: rollout-example
 spec:
-  replicas: 5
+  replicas: 4
   selector:
     matchLabels:
       app: blogger-api
