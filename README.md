@@ -81,7 +81,7 @@ spec:
           weight: 0
 ```
 
-```
+```yaml
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
