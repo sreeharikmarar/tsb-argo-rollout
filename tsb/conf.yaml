@@ -96,7 +96,7 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - blogger.tetrate.com
+    - blogger-test.tetrate.com
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
@@ -136,7 +136,7 @@ metadata:
     tsb.tetrate.io/gatewayGroup: blogger-gateway
 spec:
   hosts:
-    - "blogger.tetrate.com"
+    - "blogger-test.tetrate.com"
   gateways:
     -  blogger-gateway
   http:
