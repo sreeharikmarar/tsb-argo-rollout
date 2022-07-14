@@ -12,7 +12,7 @@ Please refer the offical documentation [here](https://argoproj.github.io/argo-ro
 
 ### Deploy Application 
 
-You can choose to keep your existing k8s application deployment and service along with argo rollout object. You can make necassary changes to rollout object and Istio VirtualService/DesintationRule TSB configuration to achieve canary rollout. 
+You can choose to keep your existing k8s application deployment and service along with argo rollout object. You can make necassary changes to Rollout object and TSB mesh configuration of Istio VirtualService/DesintationRule to achieve the desired result. 
 
 Refer application deployment spec [here](https://github.com/sreeharikmarar/tsb-argo-rollout/tree/main/application)
 
@@ -114,6 +114,7 @@ Rest of the TSB configurations for `Tenant`, `Workspace`, `Groups` can be referr
 
 * Create a Rollout resource and refer your existing deployment using `workloadRef`. 
 * Make sure selector matchLabels has been configured based on your k8s application deployment manifest. 
+* Configure strategy to use canary with subset level traffic splitting.
 * Configure `canaryMetadata` to inject labels and annotations on canary and stable pods.
 * Configure Istio `virtualService` and `destinationRule` based on TSB configuration.
 * Scale down your existing deployment to 0 by changing the replicas.
@@ -152,16 +153,23 @@ spec:
           destinationRule:
             name: blogger-dr    
             canarySubsetName: canary  
-            stableSubsetName: stable  
+            stableSubsetName: stable
       steps:
-      - setWeight: 5
-      - pause:
-          duration: 10m
+      - setWeight: 10
+      - pause: {}
+      - setWeight: 20
+      - pause: {duration: 10}
+      - setWeight: 40
+      - pause: {duration: 10}
+      - setWeight: 60
+      - pause: {duration: 10}
+      - setWeight: 80
+      - pause: {duration: 10}
 ```
 
 ### Trigger Canary
 
-Update App images to canary version
+Update the app image to canary version. This will immediately trigger a canary deployment and will modify the traffic percentage as 90/10.
 
 ```
 $: kubectl argo rollouts set image rollout-example blogger-api-web=gcr.io/sreehari-test-1/blogger:0.0.9 -n content
@@ -173,20 +181,23 @@ deployment "blogger-api-web" image updated
 ```
 $: kubectl argo rollouts get rollout rollout-example --watch -n content
 ```
-
-![Screenshot 2022-07-14 at 5 10 38 PM](https://user-images.githubusercontent.com/855824/178975464-1399fcc8-03ae-4144-a4e8-8eba92eccb65.png)
+![Screenshot 2022-07-14 at 9 50 09 PM](https://user-images.githubusercontent.com/855824/179030012-cb0ef119-759f-4435-90e1-f1c2d4f03ea6.png)
 
 ![Screenshot 2022-07-14 at 5 11 03 PM](https://user-images.githubusercontent.com/855824/178975655-4bc57ff9-9899-4aed-b047-5152acfcbcb5.png)
 
-![Screenshot 2022-07-14 at 4 54 10 PM](https://user-images.githubusercontent.com/855824/178972702-899aa111-4335-46bb-b99c-3046be242bf3.png)
+![Screenshot 2022-07-14 at 9 29 07 PM](https://user-images.githubusercontent.com/855824/179029500-e854c210-4c38-4071-9d44-8eeee8c6dac7.png)
 
 
-### Promote Canary 
+### Promote Canary Deployment
+
+You can either do a promote which will proceed to the next steps mentioned in the Rollout by changing the traffic weight and will eventually rollout the new version completely or you can also do full promote to desired version by skipping analysis, pauses, and steps.  
 
 ```
 $: kubectl argo rollouts promote rollout-example -n content
 rollout 'rollout-example' promoted
 ```
-![Screenshot 2022-07-14 at 4 57 52 PM](https://user-images.githubusercontent.com/855824/178972805-214ca3a7-7ca6-41fe-a3e3-a5cb1991f00c.png)
+![Screenshot 2022-07-14 at 9 35 25 PM](https://user-images.githubusercontent.com/855824/179028774-c5015c5b-712b-4c9b-b6c3-dc1e9b96cf19.png)
+
+
 
 
